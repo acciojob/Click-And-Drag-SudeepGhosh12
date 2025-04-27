@@ -1,57 +1,29 @@
-const container = document.getElementById('container');
-const items = Array.from(container.querySelectorAll('.item'));
+const slider = document.querySelector('.items');
+let isDown = false;
+let startX;
+let scrollLeft;
 
-const spacing = 20;
-const size = 100;
-
-// Initial placement in grid using absolute positioning
-items.forEach((item, index) => {
-  const row = Math.floor(index / 5);
-  const col = index % 5;
-  item.style.left = `${col * (size + spacing)}px`;
-  item.style.top = `${row * (size + spacing)}px`;
+slider.addEventListener('mousedown', (e) => {
+  isDown = true;
+  slider.classList.add('active');
+  startX = e.pageX - slider.offsetLeft;
+  scrollLeft = slider.scrollLeft;
 });
 
-let selected = null;
-let offsetX = 0, offsetY = 0;
-
-container.addEventListener('mousedown', (e) => {
-  if (e.target.classList.contains('item')) {
-    selected = e.target;
-    selected.classList.add('dragging');
-    
-    const rect = selected.getBoundingClientRect();
-    const containerRect = container.getBoundingClientRect();
-    offsetX = e.clientX - rect.left;
-    offsetY = e.clientY - rect.top;
-
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-  }
+slider.addEventListener('mouseleave', () => {
+  isDown = false;
+  slider.classList.remove('active');
 });
 
-function onMouseMove(e) {
-  if (!selected) return;
+slider.addEventListener('mouseup', () => {
+  isDown = false;
+  slider.classList.remove('active');
+});
 
-  const containerRect = container.getBoundingClientRect();
-
-  let newLeft = e.clientX - containerRect.left - offsetX;
-  let newTop = e.clientY - containerRect.top - offsetY;
-
-  // Enforce boundary limits
-  newLeft = Math.max(0, Math.min(newLeft, container.clientWidth - selected.clientWidth));
-  newTop = Math.max(0, Math.min(newTop, container.clientHeight - selected.clientHeight));
-
-  selected.style.left = `${newLeft}px`;
-  selected.style.top = `${newTop}px`;
-}
-
-function onMouseUp() {
-  if (selected) {
-    selected.classList.remove('dragging');
-    selected = null;
-  }
-
-  document.removeEventListener('mousemove', onMouseMove);
-  document.removeEventListener('mouseup', onMouseUp);
-}
+slider.addEventListener('mousemove', (e) => {
+  if (!isDown) return;
+  e.preventDefault();
+  const x = e.pageX - slider.offsetLeft;
+  const walk = (x - startX) * 1.5; // * scroll speed multiplier
+  slider.scrollLeft = scrollLeft - walk;
+});

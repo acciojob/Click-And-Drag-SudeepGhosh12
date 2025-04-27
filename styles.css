@@ -4,42 +4,36 @@
 
 body {
   margin: 0;
+  padding: 0;
   height: 100vh;
+  background: #222;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #222;
-  font-family: sans-serif;
 }
 
 .items {
-  display: grid;
-  grid-template-columns: repeat(5, 100px);
-  grid-gap: 20px;
-  width: 600px;
-  height: 600px;
-  border: 4px dashed white;
-  position: relative;
+  display: flex;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  width: 80%;
   padding: 20px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.1);
+  white-space: nowrap;
+  cursor: grab;
 }
 
 .item {
-  width: 100px;
-  height: 100px;
+  min-width: 150px;
+  height: 150px;
+  margin-right: 20px;
   background: #3498db;
   color: white;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-weight: bold;
-  cursor: grab;
-  position: absolute;
+  font-size: 24px;
+  border-radius: 10px;
   user-select: none;
-  transition: box-shadow 0.2s;
-}
-
-.item.dragging {
-  cursor: grabbing;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  flex-shrink: 0;
 }
